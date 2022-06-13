@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -21,11 +22,14 @@ public class BoardRepositoryTest {
     @Autowired
     private BoardRepository boardRepo;
 
+    @Autowired
+    private PasswordEncoder encoder;
+
     @Test
     public void testInsert() {
         Member member1 = new Member();
         member1.setId("member");
-        member1.setPassword("member123");
+        member1.setPassword(encoder.encode("member123"));
         member1.setName("둘리");
         member1.setRole(Role.ROLE_MEMBER);
         member1.setEnabled(true);
@@ -33,7 +37,7 @@ public class BoardRepositoryTest {
 
         Member member2 = new Member();
         member2.setId("admin");
-        member2.setPassword("admin123");
+        member2.setPassword(encoder.encode("admin123"));
         member2.setName("도우너");
         member2.setRole(Role.ROLE_ADMIN);
         member2.setEnabled(true);

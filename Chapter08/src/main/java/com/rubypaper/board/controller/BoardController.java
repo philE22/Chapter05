@@ -2,9 +2,12 @@ package com.rubypaper.board.controller;
 
 import com.rubypaper.board.domain.Board;
 import com.rubypaper.board.domain.Member;
+import com.rubypaper.board.domain.Search;
+import com.rubypaper.board.security.SecurityUser;
 import com.rubypaper.board.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +21,12 @@ public class BoardController {
     private BoardService boardService;
 
     @RequestMapping("/getBoardList")
-    public String getBoardList(Model model, Board board) {
-        Page<Board> boardList = boardService.getBoardList(board);
+    public String getBoardList(Model model, Search search) {
+        if (search.getSearchCondition() == null)
+            search.setSearchCondition("TITLE");
+        if (search.getSearchKeyword() == null)
+            search.setSearchKeyword("");
+        Page<Board> boardList = boardService.getBoardList(search);
         model.addAttribute("boardList", boardList);
         return "board/getBoardList";
     }
@@ -36,7 +43,8 @@ public class BoardController {
     }
 
     @PostMapping("/insertBoard")
-    public String insertBoard(Board board) {
+    public String insertBoard(Board board, @AuthenticationPrincipal SecurityUser principal) {
+        board.setMember(principal.getMember());
         boardService.insertBoard(board);
         return "redirect:getBoardList";
     }
