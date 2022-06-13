@@ -1,0 +1,6 @@
+com/rubypaper/LoggingRunner.class
+com/rubypaper/service/BoardServiceImpl.class
+com/rubypaper/controller/BoardController.class
+com/rubypaper/service/BoardService.class
+com/rubypaper/domain/BoardVO.class
+com/rubypaper/Chapter03Application.class
